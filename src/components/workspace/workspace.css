@@ -1,0 +1,13 @@
+.auth-nav {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: .5rem 5rem 0 0;
+}
+
+/* workspace-container */
+.workspace-container {
+    display: grid;
+    place-content: center;
+    margin: .2vw 5vw;
+}

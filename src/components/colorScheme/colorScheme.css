@@ -1,0 +1,46 @@
+.color-scheme {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.primary {
+    background-color: var(--background-color);
+    width: 10rem;
+    height: 8rem;
+}
+
+.primary h2 {
+    color: var(--on-background-color)
+}
+
+.primary-2 {
+    background-color: var(--background-color-2)
+    ;
+    width: 10rem;
+    height: 8rem;
+}
+
+.primary-2 h2 {
+    color: var(--on-background-color-2)
+}
+
+.secondary {
+    background-color: var(--secondary);
+    width: 10rem;
+    height: 8rem;
+}
+
+.secondary h2{
+    color: var(--on-secondary)
+}
+
+.secondary-2 {
+    background-color: var(--secodary-2);
+    width: 10rem;
+    height: 8rem;
+}
+
+.secondary-2 h2{
+    color: var(--on-secondary-2)
+}

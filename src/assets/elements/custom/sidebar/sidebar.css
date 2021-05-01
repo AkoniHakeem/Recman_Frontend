@@ -1,0 +1,36 @@
+.sidebar {
+    width: 20rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--background-color-2);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.hidden {
+    display: none;
+}
+
+.header {
+    padding: 0 4rem ;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    margin: 0 1rem;
+}
+
+.main ul {
+    list-style: none;
+}
+
+.divider {
+    width: 100%;
+    height: .1rem;
+    background-color: var(--divider-on-primary);
+}

@@ -11,3 +11,124 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  /* primary */
+  --primary-h: 214;
+  --on-primary-h: 0;
+  --primary: hsl(var(--primary-h), 100%, 21%);
+  /* on-primary */
+  --on-primary: hsl(var(--on-primary-h), 0%, 96%);
+
+  --primary-2: var(--on-primary);
+
+  --on-primary-2: var(--primary);
+  
+  /* secondary */
+  --secondary: hsl(214, 100%, 21%);
+  /* on-secondary */
+  --on-secondary: hsl(0, 0%, 100%);
+
+    /* secondary */
+    --secondary-2: hsl(0, 0%, 100%);
+    /* on-secondary */
+    --on-secondary-2: hsl(214, 100%, 21%);
+
+  /* important */
+  --important: hsl(28, 94%, 58%);
+
+  --on-important: var(--on-primary);
+
+  /* background */
+  --background-color: var(--primary);
+  --background-color-2: var(--primary-2);
+  --background-color-secondary: var(--secondary);
+
+  --on-background-color: var(--on-primary);
+  /* on-background-color */
+  --on-background-color-2: var(--on-primary-2);
+
+  /* surface */
+  --surface: var(--background-color-2);
+
+  /* on-surface */
+  --on-surface: var(--on-background-color-2);
+
+  /* error */
+  --error: hsl(347, 100%, 50%);
+  /* on-error */
+  --on-error: hsl(0, 0%, 0%);
+
+  
+
+
+/* consider having all of the following specified for consistency */
+
+/* 
+  
+	* border
+	* outline
+	* background
+	* text
+	* navbar
+	* shadow
+	* links
+	* focus
+	* error
+	* blur
+
+*/
+
+    /* selected */
+  --selected: hsl(213, 94%, 25%);
+
+  --color: var(--on-background-color-2);
+  /* --color-fade:  */
+  --text-color: var(--color);
+  --input-focus:var(--important);
+  --border-color: var(--primary);
+  --outline-color: var(--primary);
+  --link: var(--on-primary);
+  --btn-primary:var(--on-primary);
+  --box-shadow-color: hsl(215, 14%, 67%);
+  --multiplier: 1;
+  --divider-on-primary: hsl(var(--primary-h), 0%, 90%)
+
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --multiplier: 2
+  }
+}
+
+@media (min-width: 80rem) {
+  :root {
+    --multiplier: 3
+  }
+}
+
+/* caret-item */ 
+.caret-item {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+/* app-title */
+.app-title {
+  position: absolute;
+  left: 4rem;
+  bottom: .05rem;
+} 
+
+/* form-area */
+.form-area {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+}
