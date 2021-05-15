@@ -132,3 +132,13 @@ code {
 a {
   text-decoration: none;
 }
+
+.divider {
+  width: 100%;
+  height: .1rem;
+  background-color: var(--divider-on-primary);
+}
+
+.table {
+  margin-top: 3vh;
+}

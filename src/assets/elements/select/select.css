@@ -1,0 +1,4 @@
+.select-default {
+    width: calc(var(--multiplier) * 10rem);
+    padding: .5rem;
+}

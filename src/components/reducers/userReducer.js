@@ -7,6 +7,7 @@ function UserReducer(user, action) {
                 token: action.payload.token
             }
         },
+        
         updateUser(){
             let _user = action.payload.user 
             return {

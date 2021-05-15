@@ -10,10 +10,15 @@ import CaretlistItem from "../uList/caretListItem"
 import "./home.css"
 import Page from "../../assets/elements/custom/page/page"
 import MainContent from "../../assets/elements/custom/maincontent/maincontent"
+import { Redirect } from "react-router"
 
 const Home = (props) => {
     
+    if(!props.content) {
+        return <Redirect to="/workspace"/>
+    }
     return(
+        
         <Page className="container-page-flex"
 
             maincontent={

@@ -6,25 +6,37 @@ import useAuth from "../../assets/hooks/useAuth";
 import MainContent from "../../assets/elements/custom/maincontent/maincontent";
 import Page from "../../assets/elements/custom/page/page";
 import FormGroup from "../../assets/elements/custom/formGroup/formGroup";
+import config from "../../config";
 
 const Login = (props) => {
     const location = useLocation();
     const {from} = location.state || {pathname: "/"}
-    const [email, emailError, emailBind, emailActions] = useInput("email");
-    const [password, passwordError, passwordBind, passwordActions] = useInput("password", "password")
-    const [isAuthenticated, , , setUser, removeUser] = useAuth();
+    const [email, , emailBind, ] = useInput("email");
+    const [password, , passwordBind, ] = useInput("password", "password")
+    const [isAuthenticated, , , setUser, ] = useAuth();
     const [authUrl, setAuthUrl] = useState(undefined)
-    const serverAuthUrl = "localhost:3000"
+    const serverAuthUrl = config.backendUrl + config.backendApiPath + "/auth/login"
 
     useEffect(() => {
         if(authUrl) {
-            setUser({_id:1}, "usertoken")
+            const requestBody = {email, password}
+            const options = {
+                "method": "POST",
+                body: JSON.stringify(requestBody),
+                "headers": {"Content-Type": "application/json"}
+            }
+            let response;
+            fetch(authUrl,options).then( async(res) => {
+                 response = await res.json()
+                 const responseBody = JSON.parse(response)
+                 setUser(responseBody["user"], responseBody["token"])
+            })
+
         }
     }, [authUrl])
 
     const setServerAuthUrl = (e) => {
         e.preventDefault()
-
         setAuthUrl(serverAuthUrl)
     }
 
