@@ -9,4 +9,4 @@ function EventsReducer(events, action) {
     return events_reducer[action.type]()
 }
 
-module.exports = EventsReducer;
+export default EventsReducer;
