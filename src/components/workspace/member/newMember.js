@@ -6,7 +6,6 @@ import { useInput } from "../../../assets/hooks/useInput"
 import WorkSpaceContainer from "../workspaceContainer"
 import config from "../../../config"
 import Select from "../../../assets/elements/select/select"
-import { AppContext } from "../../contexts/appContext"
 import { useParams } from "react-router"
 import useFetchFrom from "../../../assets/hooks/useFetchFrom"
 import useAuth from "../../../assets/hooks/useAuth"
@@ -14,7 +13,6 @@ import DynamicTable from "../../../assets/elements/custom/dynamicTable/dynamicTa
 import useFormInputBind from "../../../assets/hooks/useFormInputBind"
 
 const NewMember = (props) => {
-    const appContext = useContext(AppContext)
     const {organizationId} = useParams()
     // we need dynamic field imlementation that would be based on user configuration on first use
     // const [dynamicFieldInputName, setDynamicFieldName] = useState("");
@@ -22,10 +20,10 @@ const NewMember = (props) => {
     const [, , user] = useAuth()
 
     const [name, , nameBind,] = useInput("name")
-    const [userId, , userIdBind] = useInput("userId", "text", " ")
+    const [, , userIdBind] = useInput("userId", "text", " ")
     const [role, , roleBind, ]= useInput("role")
-    const [groupId, , groupIdBind, ] = useInput("groupId", "text", " ");
-    const [pharmacy, , pharmacyBind, ] = useInput("pharmacy", 'text', "please, enter the pharmacy discription")
+    const [, , groupIdBind, ] = useInput("groupId", "text", " ");
+    const [, , pharmacyBind, ] = useInput("pharmacy", 'text', "please, enter the pharmacy discription")
     const [email, , emailBind] = useInput("email")
 
     const inputBinds = [nameBind, roleBind, groupIdBind, emailBind, userIdBind];
@@ -131,7 +129,7 @@ const NewMember = (props) => {
                 body: JSON.stringify(body),
                 "headers": {
                     "Content-Type": "application/json",
-                    "Authorization": `bearer ${appContext.userContext.user.token}`
+                    "Authorization": `bearer ${user.token}`
                 }
             }
     

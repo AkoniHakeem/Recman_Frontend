@@ -1,10 +1,10 @@
-import WorkSpaceContainer from "../workspaceContainer"
-import {useInput} from "../../../assets/hooks/useInput"
+import WorkSpaceContainer from "../workspaceContainer";
+import {useInput} from "../../../assets/hooks/useInput";
 import Button from "../../../assets/elements/button/button";
 import Input from "../../../assets/elements/input/input";
 import FormGroup from "../../../assets/elements/custom/formGroup/formGroup";
 import useFetchFrom from "../../../assets/hooks/useFetchFrom";
-import { useCallback, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import config from "../../../config";
 import { AppContext } from "../../contexts/appContext";
 
@@ -18,9 +18,9 @@ const NewOrganization = (props) => {
         body: JSON.stringify(requestBody),
         "headers": {"Content-Type": "application/json", "authorization": `bearer ${userContext.user.token}`}
     }
-    const [setRequestUrl, setRetry ] = useFetchFrom(options, (statusCode, responseBody)=> {
+    const [setRequestUrl] = useFetchFrom(options, (statusCode, responseBody)=> {
         if(statusCode === 200) {
-            alert(responseBody)
+            alert(responseBody.message)
             nameActions.setvalue("")
         }
         else {
