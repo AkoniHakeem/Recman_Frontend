@@ -9,7 +9,7 @@ const environments = {
     }
 }
 process.env.NODE_ENV || console.log("NODE_ENV is not defined") 
-const envName = process.env.NODE_ENV?.trim()
-const currentEnvironment = environments[process.env?.NODE_ENV?.toLocaleLowerCase()] || environments.development;
+const envName = process.env.NODE_ENV.trim()
+const currentEnvironment = environments[process.env.NODE_ENV.toLowerCase()] || environments.development;
 
 export default currentEnvironment
