@@ -4,8 +4,8 @@ const environments = {
         backendApiPath: "/api/v1"
     },
     "production": {
-        backendUrl: process.env.BACKEND_URL,
-        backendApiPath: process.env.BACKEND_API_PATH
+        backendUrl: process.env.BACKENDAPIPATH,
+        backendApiPath: process.env.BACKENDAPIPATH || "/api/v1"
     }
 }
 process.env.NODE_ENV || console.log("NODE_ENV is not defined") 
