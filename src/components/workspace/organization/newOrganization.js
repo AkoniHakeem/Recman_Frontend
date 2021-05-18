@@ -9,7 +9,7 @@ import config from "../../../config";
 import { AppContext } from "../../contexts/appContext";
 
 const NewOrganization = (props) => {
-    const [name, nameError, nameBind, nameActions] = useInput("name");
+    const [name, nameBind, nameActions] = useInput("name");
     const [requestBody, setRequestBody] = useState({name});
     const appContext = useContext(AppContext);
     const userContext = appContext.userContext

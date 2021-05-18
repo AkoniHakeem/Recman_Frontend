@@ -24,9 +24,9 @@ const NewMember = (props) => {
     const [role, , roleBind, ]= useInput("role")
     const [, , groupIdBind, ] = useInput("groupId", "text", " ");
     const [, , pharmacyBind, ] = useInput("pharmacy", 'text', "please, enter the pharmacy discription")
-    const [email, , emailBind] = useInput("email")
+    const [emailPhone, , emailPhoneBind] = useInput("emailPhone")
 
-    const inputBinds = [nameBind, roleBind, groupIdBind, emailBind, userIdBind];
+    const inputBinds = [nameBind, roleBind, groupIdBind, emailPhoneBind, userIdBind];
     const inputValues = useFormInputBind(inputBinds)
 
     const [requestOptions, setRequestOptions] = useState({})
@@ -44,7 +44,7 @@ const NewMember = (props) => {
          // load data from back end with id
          // set parameters
          // options
-         if(email) {
+         if(emailPhone) {
             const options = {
                 "method": "GET",
                 "headers": {
@@ -59,7 +59,9 @@ const NewMember = (props) => {
                     const user = responseBody
                      // populate form fields with user data
                     nameBind.setvalue(user.firstname + " " + user.lastname);
-                    userIdBind.setvalue(user._id)
+                    userIdBind.setvalue(user._id);
+                    nameBind.setdisabled(true)
+                    userIdBind.setdisabled(true);
         
                 }
                 else {
@@ -69,9 +71,13 @@ const NewMember = (props) => {
             }
             setRequestCallback(() => handleUserDataFetch);
             setRequestOptions(options);
-            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?email=${email}`)
+            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${emailPhone.includes("@")? "email": "phone"}=${emailPhone}`)
          }
-    },[email])
+         else {
+            nameBind.setdisabled(false)
+            userIdBind.setdisabled(false);
+         }
+    },[emailPhone])
 
     const loadMembers = () => {
         const page = 1;
@@ -118,7 +124,7 @@ const NewMember = (props) => {
 
     const submit = (e) => {
         e.preventDefault();
-        if(name &&  email && role !== "undefined")  {
+        if(name &&  emailPhone && role !== "undefined")  {
             const body = {
                 ...inputValues,
                 organizationId,
@@ -150,8 +156,8 @@ const NewMember = (props) => {
 
                         </FormGroup> */}
                         <FormGroup className="stacked">
-                            <label>Email</label>
-                            <Input {...emailBind}/>
+                            <label>Email or Phone</label>
+                            <Input {...emailPhoneBind}/>
                         </FormGroup>
                         <FormGroup className="stacked">
                             <label>User Id</label>

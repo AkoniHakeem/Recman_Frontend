@@ -22,6 +22,7 @@ export const useInputOnchange = function(placeholder) {
 export const useInput = function (name="name", type="text", placeholder=`Please, supply the ${name || "value"}`) {
     let [value, setvalue] = useState("");
     let [error, seterror] = useState("");
+    let [disabled, setdisabled] = useState(false)
 
     let clearinput = ()=>{
         setvalue("");
@@ -41,6 +42,8 @@ export const useInput = function (name="name", type="text", placeholder=`Please,
         type,
         required: true,
         error,
+        disabled,
+        setdisabled,
         seterror,
         clearinput,
         setvalue,

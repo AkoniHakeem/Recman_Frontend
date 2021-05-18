@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 import Button from "../../../assets/elements/button/button"
 import FormGroup from "../../../assets/elements/custom/formGroup/formGroup"
@@ -16,12 +16,14 @@ const PaymentRecord = (props) => {
     const {paymentRecordName, organizationId} = useParams();
 
     /* form input */
+    const [emailPhone, , emailPhoneBind, ] = useInput("emailPhone", "text", "please, supply the email or phone")
     const [userId, , userIdBind,] = useInput("userId", "text", "Please supply the user id");
+    const [, , nameBind,] = useInput("name")
     const [amount, , amountBind,] = useInput("amount");
     const [ , , modeBind, ] = useInput("mode")
     const [ , ,timePeriodBind, ] = useInput("timePeriod", "text", "Time period like 'January' or 'Week 7' ")
     const [ , , yearBind, ] = useInput("year", "number", "please, type the year")
-    const inputBinds = [userIdBind, amountBind, modeBind, timePeriodBind, yearBind]; 
+    const inputBinds = [emailPhoneBind, userIdBind, nameBind, amountBind, modeBind, timePeriodBind, yearBind]; 
     const inputValues = useFormInputBind(inputBinds);
 
     /* state variables */
@@ -96,6 +98,42 @@ const PaymentRecord = (props) => {
         tableRef.current.updateTableData(payments)
     }, [payments])
 
+    useEffect(() => {
+        if(emailPhone) {
+            const options = {
+                "method": "GET",
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${user.token}`
+                }
+            }
+
+            const handleUserDataFetch = (statusCode, responseBody) =>  {
+                if(statusCode === 200) {
+                    console.log(responseBody);
+                    const user = responseBody
+                     // populate form fields with user data
+                    nameBind.setvalue(user.firstname + " " + user.lastname);
+                    userIdBind.setvalue(user._id);
+                    nameBind.setdisabled(true)
+                    userIdBind.setdisabled(true);
+        
+                }
+                else {
+                    alert("we could not find the user whose id you supplied !");
+                }
+                setRequestUrl(undefined)
+            }
+            setCallback(() => handleUserDataFetch);
+            setRequestOptions(options);
+            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${emailPhone.includes("@")? "email": "phone"}=${emailPhone}`)
+        }
+        else {
+            nameBind.setdisabled(false)
+            userIdBind.setdisabled(false);
+        }
+    }, [emailPhone])
+
     const getPayments = () => {
             const options = {
                 "method": "GET",
@@ -115,9 +153,17 @@ const PaymentRecord = (props) => {
         <WorkSpaceContainer breadCrumbsList={[`/${paymentRecordName}`]}> {/* bread crumbs value should be dynamically generated */}
             <form onSubmit={onSubmit.bind(this)}>
                 <div className="form-area">
+                <FormGroup className="stacked">
+                        <label>Email or Phone</label>
+                        <Input {...emailPhoneBind}/>
+                    </FormGroup>
                     <FormGroup className="stacked">
                         <label>User Id</label>
                         <Input {...userIdBind}/>
+                    </FormGroup>
+                    <FormGroup className="stacked">
+                        <label>Name</label>
+                        <Input {...nameBind}/>
                     </FormGroup>
                     <FormGroup className="stacked">
                         <label>Amount</label>
