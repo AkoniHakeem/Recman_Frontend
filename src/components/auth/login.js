@@ -7,6 +7,7 @@ import MainContent from "../../assets/elements/custom/maincontent/maincontent";
 import Page from "../../assets/elements/custom/page/page";
 import FormGroup from "../../assets/elements/custom/formGroup/formGroup";
 import config from "../../config";
+import Input from "../../assets/elements/input/input";
 
 const Login = (props) => {
     const location = useLocation();
@@ -53,11 +54,11 @@ const Login = (props) => {
                         <div className="form-area">
                             <FormGroup className="stacked">
                                 <label>email</label>
-                                <input name={email.toString()} {...emailBind} />
+                                <Input {...emailBind} />
                             </FormGroup>
                             <FormGroup className="stacked">
                                 <label>password</label>
-                                <input name={password.toString()} {...passwordBind} />
+                                <Input {...passwordBind} />
                             </FormGroup>
                             <div className="submit">
                                 <Button type="" onClick={setServerAuthUrl.bind(this)} >Submit</Button>

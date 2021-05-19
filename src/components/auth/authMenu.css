@@ -61,7 +61,7 @@
 
 .container-form>form {
     border: .2rem solid var(--on-background-color);
-    width: calc(var(--multiplier) * 20rem);
+    width: auto;
 }
 
 
