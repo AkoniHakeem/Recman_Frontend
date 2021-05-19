@@ -1,44 +1,37 @@
-import { useContext, useEffect, useState} from "react";
-import {AppContext} from "../../components/contexts/appContext"
+import { useEffect, useState} from "react";
+import useAuth from "./useAuth";
+import useLoading from "./useLoading";
 const useFetchFrom = (options, callback, showLoading=true) => {
-    const appContext = useContext(AppContext)
+    const [ , setIsLoading] = useLoading()
     const [requestUrl, setRequestUrl] = useState("");
     const [retry, setRetry] = useState(false);
+    const [, , , , removeUser] = useAuth()
     useEffect(() => {
         (async()=>  {
             if(requestUrl) {
                 let response;
                 try{ 
-                    appContext.loadingContext.setLoading(showLoading);
+                    setIsLoading(showLoading);
                     response = await fetch(requestUrl, options)
+                    if(response.status === 401 || response.status === 403) {
+                        removeUser()
+                    }   
                     if(response.ok) {
                         // todo: handle failed response
                         let responseBody = await response.json()
                         callback(response.status, responseBody)
-                        appContext.loadingContext.setLoading(false);
+                        setIsLoading(false);
                     }
                     else {
                         callback(response.status)
-                        appContext.loadingContext.setLoading(false);
+                        setIsLoading(false);
                     }
                 }
                 catch (error) {
                     console.log(error)
                     callback(500);
-                    appContext.loadingContext.setLoading(false);
+                    setIsLoading(false);
                 }
-                //#region former implementation
-                // fetch(requestUrl, options).then((res) => {
-                //     status = res.status;
-                //     if(res.ok) {
-                //         const responseBody = await res.json()
-                //        return res.json()
-                //     } 
-                // }).then(result=> {
-                //     callback(result, status)
-                // })
-                // .catch(err => console.log(err))
-                //#endregion
             }
         })()
     

@@ -18,7 +18,6 @@ const Sidebar = (props) => {
                         return (
                             <Fragment key={i}>
                                 {child}
-                                {console.log("child: ", i)}
                                 {i !== props.children.length - 1 ? 
                                     <div className="divider"></div> : <></>
                                 }
