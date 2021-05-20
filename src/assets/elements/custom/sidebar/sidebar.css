@@ -28,3 +28,8 @@
 .main ul {
     list-style: none;
 }
+
+.main li {
+    margin: .5rem .1rem;
+    
+}

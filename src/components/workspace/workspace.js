@@ -121,7 +121,7 @@ const WorkSpace = (props) => {
                         {organizationsData? organizationsData.map( (currentValue, index) => (
                             <CaretlistItem id={`${index}_${currentValue.name}`} name={currentValue.name}>
                                 <ul> {/* todo: implement properly  */}
-                                    <li><Link to={`${url}/new-member/${currentValue["_id"]}`}>Members</Link></li>
+                                    <li>&nbsp;&nbsp;&nbsp;<Link to={`${url}/new-member/${currentValue["_id"]}`}>Members</Link></li>
                                 </ul>
                                 <ul>
                                     {/* using the currently interacted-with organization's id as the source id */}

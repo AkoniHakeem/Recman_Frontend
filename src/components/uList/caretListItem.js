@@ -15,13 +15,13 @@ const CaretlistItem = (props) => {
     }
     return(
         <li key={props.id} className="caret-item">
+            <div className="" onClick={toggleCaret.bind(this)}><img src={caretIsOpened? CaretOpened : CaretClosed} /></div>
             <div>
             <span>{props.linkTo? <Link to={props.linkTo}>{props.name}</Link> : props.name }</span>
                 <div>
                     {caretIsOpened? props.children : <></>}
                 </div>
             </div>
-            <div onClick={toggleCaret.bind(this)}><img src={caretIsOpened? CaretOpened : CaretClosed} /></div>
         </li>
     )
 }

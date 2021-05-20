@@ -111,8 +111,14 @@ code {
 /* caret-item */ 
 .caret-item {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   cursor: pointer;
+  position: relative
+}
+
+.caret-item .caret-img {
+  position: absolute;
+  bottom: .5rem;
 }
 
 /* app-title */
