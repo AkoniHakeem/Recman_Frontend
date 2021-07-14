@@ -6,3 +6,17 @@
     position: absolute;
     left: 20rem;
 }
+
+.main-content .with-right-sidebar {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+/* .main-content .right-content {
+    border-left: .1rem var(--border-color) solid;
+} */
+
+.main-content .left-content {
+    width: 98%;
+}

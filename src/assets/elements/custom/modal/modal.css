@@ -1,0 +1,58 @@
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.modal .modal-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: #a09e9e5a;
+    overflow-y: scroll;
+    /* padding: 5rem */
+}
+
+.modal-box {
+    /* important for responsive design */
+    min-height: 5vh;
+    /* min-width: 30vw; */
+    /* max-width: max-content; */
+    width: clamp(15rem, 50vw, 80rem);
+    margin: 12% auto;
+    /* important for responsive design */
+    padding: 1rem;
+    background-color: var(--background-color-2);
+    box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+    -webkit-box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+    -moz-box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+}
+
+.modal-box-margin {
+    margin: 12% auto;
+}
+
+/* .modal-header {
+    padding-bottom: 1rem;
+    min-height: 20%;
+    display:flex;
+    justify-content: space-between;
+} */
+
+.modal-body {
+    min-height: 20vh;
+}
+
+.modal-body-borders {
+    border-bottom: .1rem solid var(--on-background-color-2);
+    border-top: .1rem solid var(--on-background-color-2);
+}
+
+/* .modal-footer {
+    padding-top: 1rem;
+}
+
+.modal-footer button {
+    margin: 0 .5rem;
+} */

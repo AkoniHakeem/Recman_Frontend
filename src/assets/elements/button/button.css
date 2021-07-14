@@ -17,18 +17,23 @@
     border: none;
     padding: 0;
     cursor: pointer;
+    outline: none;
+}
+
+.btn-close:active .line {
+    width: 1.2rem;
 }
 
 .line {
-    width: 1.8rem;
+    width: 1.4rem;
     height: .1rem;
     background-color: var(--on-background-color-2);
 }
 
 .close-line-1 {
-    transform: rotate(45deg);
+    transform: rotate(42deg) translate(0.1rem, .25rem) ;
 }
 
 .close-line-2 {
-    transform: rotate(135deg);
+    transform: rotate(-45deg)  translateX(-0.2rem);
 }

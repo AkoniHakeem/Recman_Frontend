@@ -15,3 +15,18 @@
 .recman-welcome {
     text-align: center;
 }
+
+.meat-ball{
+    padding: .2rem .4rem .6rem .2rem;
+    margin: 0 .4rem;
+    width: 1.2rem;
+}
+.meat-ball:hover {
+    background-color: var(--on-background-color);
+    cursor: pointer;
+}
+
+.meat-ball span {
+    margin: .1rem;
+    font-weight: bolder;
+}

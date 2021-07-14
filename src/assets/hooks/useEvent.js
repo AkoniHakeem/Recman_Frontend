@@ -19,30 +19,21 @@ const useEvent = function (name) {
     else {
         events[name] = {
             _eventName: name,
-            _event: {},
-            publish(subscriptionId, payload) {
-                // todo: handle case when it is important to publish  to all subscriptions
-                /* 
-                    if(! subscriptionId) {
-                        Object.keys(this._event).forEach(k => {
-                            if(this._event.hasOwnProperty(k)) {
-                                this._event[k](payload)
-                            }
-                        })
-                        return;
-                    }
-                */ // implement something similar to remove all subscriptions
+            _event: [],
+            publish(payload) {
 
-                // get the currently registered event
-                this._event[subscriptionId] && this._event[subscriptionId](payload) 
+                this._event.forEach(subscriber => {
+                    subscriber(payload);
+                })
             },
-            subscribe(id, callMe) {
-                this._event[id] = callMe
+            subscribe(callMe) {
+                this._event.push(callMe)
                 this.registerEvents()
             },
             unsubsribe(id) {
                 // get the currently registered event
-                this._event[id] && delete this._event[id]
+                // this._event[id] && delete this._event[id]
+                // todo: unsubscription
             },
             registerEvents() {
                 eventsContext.dispatch(events)

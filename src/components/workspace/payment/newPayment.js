@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import Button from "../../../assets/elements/button/button"
 import FormGroup from "../../../assets/elements/custom/formGroup/formGroup"
 import Input from "../../../assets/elements/input/input"
@@ -9,6 +9,7 @@ import WorkSpaceContainer from "../workspaceContainer"
 import config from "../../../config"
 import { AppContext } from "../../contexts/appContext"
 import { useParams } from "react-router"
+import Modal from "../../../assets/elements/custom/modal/modal"
 
 const NewPaymentRecord = (props) => {
     const userContext = useContext(AppContext).userContext;
@@ -55,8 +56,21 @@ const NewPaymentRecord = (props) => {
         }
 
     }
+
+    /* create ref handle for functions exposed from modal */
+    const modalref = useRef(null);
+    useEffect(() => {
+         modalref.current.showModal(true);
+    }, [])
+
+    const handleModalEvent = (eventInfo) => {
+        console.log(eventInfo);
+    }
+
     return(
         <WorkSpaceContainer breadCrumbsList={["/new-payment-record"]}>
+            <Modal ref={modalref} title="first-modal" leftActionButton="Save" rightActionButton="Cancel" handleEvent={handleModalEvent}  ></Modal>
+
             <form onSubmit={onSubmit.bind(this)}>
                 <div className="form-area">
                     <FormGroup className="stacked">

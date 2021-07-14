@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import Button from "../../assets/elements/button/button"
 import MenuButton from "../../assets/elements/custom/menubutton/menubutton"
 import Navbar from "../../assets/elements/custom/navbar/navbar"
@@ -17,22 +17,54 @@ import PaymentRecord from "./payment/PaymentRecord"
 import useFetchFrom from "../../assets/hooks/useFetchFrom"
 import config from "../../config"
 import useEvent from "../../assets/hooks/useEvent"
+import DropDown from "../../assets/elements/custom/dropdown/dropdown"
+import { useClickAway, useLocalStorageState } from "ahooks"
+import ExpectedPayments from "./payment/expectedPayments"
+import Modal from "../../assets/elements/custom/modal/modal"
+import ExpectedPaymentForm from "./payment/expectedPaymentForm"
 
 
 const WorkSpace = (props) => {
+    /* navigation  parameters*/
     const location = useLocation();
     const {url, path} = useRouteMatch();
-    const [sidebarVisible, setSidebarVisible] = useState(true);
+
+    /*  authenticated user */
+    const [isAuthenticated, , user] = useAuth();
+
+    /* states */
     const [responseCallback, setResponseCallback] = useState(() => {})
     const [organizationsData, setOrganizationDatas] = useState([])
     const [fetchParams, setFetchParams] = useState("orgsParams");
-    const [currentlyFocusedOrganizationId, setCurrentlyFocusedOrganizationId] = useState("")
-     /* paymentRecord is of the form {[organizationId]: []} */
-     const [paymentRecords, setPaymentRecords] = useState({[currentlyFocusedOrganizationId]: []});
+    const [currentlyFocusedOrganizationId, setCurrentlyFocusedOrganizationId] = useState("");
+    const [paymentRecords, setPaymentRecords] = useState({[currentlyFocusedOrganizationId]: []}); /* paymentRecord is of the form {[organizationId]: []} */
+    const [currenPaymentRecordPageDetails, setCurrenPaymentRecordPageDetails] = useState({});
+    const [menuClicked, setMenuClicked] = useState(false);
+    const [requestOptions, setRequestOptions] = useState({});
 
-    const [isAuthenticated, , user] = useAuth();
-    const eventContext = useEvent("caret-open");
+    /* saving state for right menu content */
+    const [menuContentState, setMenuContentState] = useLocalStorageState("right-menu-content-state", {});
 
+    // setter for custom css property
+    // const [ setCustomCSSProperty] = useCustomCSSProperty();
+    // sidebar visible state
+    const [sidebarVisible, setSidebarVisible] = useState(true);
+
+    /* refs */
+    const modalRef = useRef(null);
+
+    /*  click away ref */
+    const clickAwayRef = useRef(null);
+    useClickAway((e) => {
+        setMenuClicked(false)
+    }, clickAwayRef)
+
+     /* custom events */ 
+    const caretOpenEvent = useEvent("caret-open");
+    const paymentRecordPageEvent = useEvent("payment-record-page");
+    const pageReadyEvent = useEvent("page-ready");
+
+    /* static variable */
     const dynamicRecordType = "Payment"
 
     const toggleSidebar = () => {
@@ -50,13 +82,16 @@ const WorkSpace = (props) => {
             // create an early subscription
             responseBody.forEach(orgData => {
                 // subscribe to caret-open event
-                eventContext.subscribe(orgData._id, (payload) => {
+                caretOpenEvent.subscribe((payload) => {
                 // checking to know  we are responding to event from the right source
                 if(payload.name === dynamicRecordType) {
                     setCurrentlyFocusedOrganizationId(payload.id)
+                    // this pattern is useful when you need to automatically load from the the available fetch params
                     setFetchParams("paymentParams")
                 }
             })
+
+            pageReadyEvent.publish(true);
             })
  
         }
@@ -81,24 +116,63 @@ const WorkSpace = (props) => {
     const backendFectchParams = {
         orgsParams: {
             responseCallback: handleOrgsFetch,
-            fetchUrl: `${config.backendUrl}${config.backendApiPath}/org?userId=${user._id}`
+            fetchUrl: `${config.backendUrl}${config.backendApiPath}/org?userId=${user._id}`,
+            options: {...options}
         },
         paymentParams: {
             responseCallback: handlePaymentRecordsFetch,
-            fetchUrl: `${config.backendUrl}${config.backendApiPath}/org/get-payment-records?organizationId=${currentlyFocusedOrganizationId}`
+            fetchUrl: `${config.backendUrl}${config.backendApiPath}/org/get-payment-records?organizationId=${currentlyFocusedOrganizationId}`,
+            options: {...options}
+        },
+        generateExpectedPayments: {
+            responseCallback: (statusCode, reponseBody) => {
+                if(statusCode===200) {
+                    alert("process successful")
+                }
+                else {
+                    alert("process failed")
+                }
+                setRequestUrl(undefined)
+            },
+            fetchUrl: `${config.backendUrl}${config.backendApiPath}/org/generate-expected-payments`,
+            options: {...options, method: "POST"}
         }
     }
 
-    const [setRequestUrl, ] = useFetchFrom(options, responseCallback, false)
+    const [setRequestUrl, ] = useFetchFrom(requestOptions, responseCallback, false)
 
     useEffect(() => {
          if(fetchParams !== undefined) {
-            setResponseCallback(()=> backendFectchParams[fetchParams]["responseCallback"])
-            console.log(backendFectchParams[fetchParams]["fetchUrl"])
-            setRequestUrl(backendFectchParams[fetchParams]["fetchUrl"])
+            setRequestOptions(backendFectchParams[fetchParams]["options"]);
+            setResponseCallback(()=> backendFectchParams[fetchParams]["responseCallback"]);
+            console.log(backendFectchParams[fetchParams]["fetchUrl"]);
+            setRequestUrl(backendFectchParams[fetchParams]["fetchUrl"]);
          }
-
     }, [fetchParams])
+    useEffect(() => {
+        paymentRecordPageEvent.subscribe(({paymentRecordName, organizationId}) => {
+            setCurrenPaymentRecordPageDetails({paymentRecordName, organizationId})
+            setMenuContentState(menuState => ({...menuState, paymentRecordName, organizationId}));
+
+        })
+        // todo: unsubscription
+    }, [])
+    
+
+    const showModal = (val) => {
+        modalRef.current.showModal(val);
+    }
+
+    const setModalBody = (modalBody, title=undefined, leftActionButton=undefined, rightActionButton=undefined, handleModalEvents=undefined) => {
+        modalRef.current.setModalBody(modalBody, title, leftActionButton, rightActionButton, handleModalEvents);
+    }
+
+    /* generate expected payments */
+    const generateExpectedPayments = (paymentRecordName, organizationId)=> {
+        setRequestOptions({...backendFectchParams["generateExpectedPayments"]["options"], "body": JSON.stringify({paymentRecordName, organizationId})})
+        setResponseCallback(()=> backendFectchParams["generateExpectedPayments"]["responseCallback"]);
+        setRequestUrl(backendFectchParams["generateExpectedPayments"]["fetchUrl"])
+    }
 
     if(!isAuthenticated) {
         return <Redirect to={{pathname: "/login", state: {from: location}}}/>
@@ -145,7 +219,40 @@ const WorkSpace = (props) => {
             }
 
             maincontent={
-                <MainContent leftGap>
+                <MainContent leftGap rightSidebar={
+                    <div >
+                        <div ref={clickAwayRef}  onClick={() => {setMenuClicked(true)}} className="meat-ball">
+                            <span>.</span>
+                            <span>.</span>
+                            <span>.</span>
+                        </div>
+                        {menuClicked? 
+                            <div className="menu-container">
+                                <DropDown useCaret style="menu">
+                                    <li><Link to={`${url}/expected_payments/${currenPaymentRecordPageDetails.paymentRecordName || menuContentState.paymentRecordName}/${currenPaymentRecordPageDetails.organizationId || menuContentState.organizationId}`}>Show Expected Payments for {currenPaymentRecordPageDetails.paymentRecordName || menuContentState.paymentRecordName}</Link></li>
+                                    <li 
+                                    onClick={ () => {
+                                        showModal(true);
+                                        /*  generateExpectedPayments.bind(this, currenPaymentRecordPageDetails.paymentRecordName 
+                                        || menuContentState.paymentRecordName, currenPaymentRecordPageDetails.organizationId || menuContentState.organizationId) */
+                                        setModalBody(
+                                            /* add generate expected payment form */
+                                            <ExpectedPaymentForm paymentRecordName={currenPaymentRecordPageDetails.paymentRecordName || menuContentState.paymentRecordName}
+                                                organizationId={ currenPaymentRecordPageDetails.organizationId || menuContentState.organizationId}/>,
+                                            `Generate Expected Payment for ${currenPaymentRecordPageDetails.paymentRecordName || menuContentState.paymentRecordName}`,
+                                            
+                                        )
+                                    }
+                                        }>Generate Expected Payments</li>
+                                </DropDown>
+                            </div> 
+                            :
+                            <></>
+                        }
+
+                    </div>
+                }>
+                    <>
                     <Switch>
                         <Route path={`${url}/new-organization`}>
                             <NewOrganization />
@@ -156,6 +263,9 @@ const WorkSpace = (props) => {
                         <Route path={`${url}/new-payment-record/:organizationId`}>
                             <NewPaymentRecord />
                         </Route>
+                        <Route path={`${url}/expected_payments/:paymentRecordName/:organizationId`}>
+                            <ExpectedPayments/>
+                        </Route>
                         <Route path={`${url}/:paymentRecordName/:organizationId`}>
                             <PaymentRecord />
                         </Route>
@@ -165,6 +275,8 @@ const WorkSpace = (props) => {
                             </div>
                         </Route>
                     </Switch>
+                    <Modal ref={modalRef}></Modal>
+                    </>
                 </MainContent>
             }
         />

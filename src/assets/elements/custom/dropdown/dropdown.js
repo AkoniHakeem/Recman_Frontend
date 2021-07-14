@@ -3,7 +3,7 @@ const DropDown = (props) => {
 
     return(
         <div>
-            <span className="caret"></span>
+            <span className={props.useCaret? "caret": ""}></span>
             <ul className={props.style}>
                 {props.children}
             </ul>

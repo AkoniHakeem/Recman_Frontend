@@ -1,5 +1,5 @@
-import {useInput} from "../../assets/hooks/useInput"
-import Button from "../../assets/elements/button/button"
+import {useInput} from "../../assets/hooks/useInput";
+import Button from "../../assets/elements/button/button";
 import { Redirect, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import useAuth from "../../assets/hooks/useAuth";

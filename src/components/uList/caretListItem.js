@@ -9,7 +9,7 @@ const CaretlistItem = (props) => {
     const toggleCaret = () => {
         if(! caretIsOpened) {
             const payload = {id: props.sourceId, name: props.name}
-            _event.publish(props.sourceId, payload);
+            _event.publish(payload);
         }
         setCaretIsOpened(!caretIsOpened)
     }

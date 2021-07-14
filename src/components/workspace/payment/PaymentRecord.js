@@ -10,6 +10,7 @@ import config from "../../../config"
 import useFormInputBind from "../../../assets/hooks/useFormInputBind"
 import DynamicTable from "../../../assets/elements/custom/dynamicTable/dynamicTable"
 import useAuth from "../../../assets/hooks/useAuth"
+import useEvent from "../../../assets/hooks/useEvent"
 
 const PaymentRecord = (props) => {
     const [ , , user] = useAuth();
@@ -25,6 +26,9 @@ const PaymentRecord = (props) => {
     const [ , , yearBind, ] = useInput("year", "number", "please, type the year")
     const inputBinds = [emailPhoneBind, userIdBind, nameBind, amountBind, modeBind, timePeriodBind, yearBind]; 
     const inputValues = useFormInputBind(inputBinds);
+
+    /* Custom-Events */
+    const paymentRecordPageEvent = useEvent("payment-record-page");
 
     /* state variables */
     const [requestOptions, setRequestOptions] = useState({})
@@ -94,6 +98,11 @@ const PaymentRecord = (props) => {
         setRequestUrl(undefined)
     }
 
+    useEffect(()=> {
+        // publish current payment record name and organization id
+        paymentRecordPageEvent.publish({paymentRecordName, organizationId})
+    }, [paymentRecordName])
+
     useLayoutEffect(() => {
         tableRef.current.updateTableData(payments)
     }, [payments])
@@ -126,7 +135,7 @@ const PaymentRecord = (props) => {
             }
             setCallback(() => handleUserDataFetch);
             setRequestOptions(options);
-            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${emailPhone.includes("@")? "email": "phone"}=${emailPhone}`)
+            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${emailPhone.includes("@")? "email": "phone"}=${emailPhone}`);
         }
         else {
             nameBind.setdisabled(false)
