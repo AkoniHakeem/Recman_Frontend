@@ -1,0 +1,30 @@
+.card {
+    /* important for responsive design */
+    min-height: 5vh;
+    min-width: 30vw;
+    max-width: max-content;
+    width: clamp(15rem, 80vw, 80rem);
+    /* margin: 12% auto; */
+    /* important for responsive design */
+    padding: 1rem;
+    background-color: var(--background-color-2);
+    box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+    -webkit-box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+    -moz-box-shadow: 0 .6rem .4rem -6px var(--box-shadow-color) ;
+    overflow-wrap: break-word;
+}
+
+.card-header {
+    padding-bottom: 1rem;
+    min-height: 20%;
+    display:flex;
+    justify-content: space-between;
+}
+
+.card-footer {
+    padding-top: 1rem;
+}
+
+.card-footer button {
+    margin: 0 .5rem;
+}

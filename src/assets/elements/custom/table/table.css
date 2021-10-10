@@ -1,0 +1,27 @@
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: .2rem thin var(--on-secondary-2);
+    margin: 1rem;
+    padding: .5rem;
+    text-align: center;
+}
+
+tr:nth-child(2n) {
+    background-color: var(--on-background-color);
+}
+
+tbody tr:hover {
+    background-color: var(--background-color);
+    color: var(--on-background-color);
+}
+
+thead tr {
+    font-weight: bold;
+}
+
+.table-footer { 
+    width: 100%;
+}

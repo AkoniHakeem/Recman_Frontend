@@ -35,7 +35,7 @@ const AuthMenu = (props) => {
             <button ref={clickAwayListener} className="auth-menu-button" onClick={openMenu.bind(this)}>
                 { isAuthenticated? userName.toUpperCase().substr(0, 1) : <img className="user-badge" src={userBadge}/>}
                 {showMenu?                
-                <DropDown style="auth-menu" >
+                <DropDown useCaret style="auth-menu" >
                     {isAuthenticated? 
                         <li onClick={logout.bind(this)}>Logout</li>
                     :

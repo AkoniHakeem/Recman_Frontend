@@ -1,5 +1,6 @@
 import { Route, Switch } from "react-router"
 import Login from "../auth/login"
+import Signup from "../auth/signup"
 import Home from "../home/home"
 import TestPage from "../testPage/testPage"
 import WorkSpace from "../workspace/workspace"
@@ -13,6 +14,9 @@ const Content = (props) => {
             </Route>
             <Route exact path="/login"> 
                     <Login />
+            </Route>
+            <Route exact path="/signup">
+                <Signup />
             </Route>
             <Route path="/workspace">
                     <WorkSpace />

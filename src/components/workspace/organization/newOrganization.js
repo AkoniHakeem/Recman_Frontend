@@ -9,7 +9,7 @@ import config from "../../../config";
 import { AppContext } from "../../contexts/appContext";
 
 const NewOrganization = (props) => {
-    const [name, nameBind, nameActions] = useInput("name");
+    const [name, ,nameBind, nameActions] = useInput("name");
     const [requestBody, setRequestBody] = useState({name});
     const appContext = useContext(AppContext);
     const userContext = appContext.userContext
@@ -27,6 +27,7 @@ const NewOrganization = (props) => {
             alert("process failed")
         }
         appContext.loadingContext.setLoading(false)
+        setRequestUrl(null)
     })
 
     const onSubmit = (e) => {
@@ -44,6 +45,7 @@ const NewOrganization = (props) => {
     return(
         <WorkSpaceContainer breadCrumbsList={["new-organization"]}>
             <div>
+                <h3>Add a new organization</h3>
                 <form onSubmit={onSubmit.bind(this)}>
                     <div className="form-area">
                         <FormGroup className="stacked">

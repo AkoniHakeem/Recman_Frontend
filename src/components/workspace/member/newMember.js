@@ -9,24 +9,24 @@ import Select from "../../../assets/elements/select/select"
 import { useParams } from "react-router"
 import useFetchFrom from "../../../assets/hooks/useFetchFrom"
 import useAuth from "../../../assets/hooks/useAuth"
-import DynamicTable from "../../../assets/elements/custom/dynamicTable/dynamicTable"
 import useFormInputBind from "../../../assets/hooks/useFormInputBind"
 
-const NewMember = (props) => {
+const NewMember = () => {
     const {organizationId} = useParams()
     // we need dynamic field imlementation that would be based on user configuration on first use
     // const [dynamicFieldInputName, setDynamicFieldName] = useState("");
     // const [dynamicFieldInputValue, , dynamicfieldInputBind, dynamicFieldInputAction] = useInput(dynamicFieldInputName)
     const [, , user] = useAuth()
 
-    const [name, , nameBind,] = useInput("name")
-    const [, , userIdBind] = useInput("userId", "text", " ")
-    const [role, , roleBind, ]= useInput("role")
+    const [name, , nameBind,] = useInput("name");
+    const [, , userIdBind] = useInput("userId", "text", " ");
+    const [role, , roleBind, ]= useInput("role");
     const [, , groupIdBind, ] = useInput("groupId", "text", " ");
-    const [, , pharmacyBind, ] = useInput("pharmacy", 'text', "please, enter the pharmacy discription")
-    const [emailPhone, , emailPhoneBind] = useInput("emailPhone")
+    const [, , pharmacyBind, ] = useInput("pharmacy", 'text', "please, enter the pharmacy discription");
+    const [email, , emailBind] = useInput("email");
+    const [phone, , phoneBind] = useInput("phone");
 
-    const inputBinds = [nameBind, roleBind, groupIdBind, emailPhoneBind, userIdBind];
+    const inputBinds = [nameBind, roleBind, groupIdBind, emailBind, userIdBind, phone];
     const inputValues = useFormInputBind(inputBinds)
 
     const [requestOptions, setRequestOptions] = useState({})
@@ -44,7 +44,7 @@ const NewMember = (props) => {
          // load data from back end with id
          // set parameters
          // options
-         if(emailPhone) {
+         if(email) {
             const options = {
                 "method": "GET",
                 "headers": {
@@ -62,22 +62,21 @@ const NewMember = (props) => {
                     userIdBind.setvalue(user._id);
                     nameBind.setdisabled(true)
                     userIdBind.setdisabled(true);
+                    phoneBind.setvalue(user.phone);
+                    phoneBind.setdisabled(true);
         
-                }
-                else {
-                    alert("we could not find the user whose id you supplied !");
                 }
                 setRequestUrl(undefined)
             }
             setRequestCallback(() => handleUserDataFetch);
             setRequestOptions(options);
-            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${emailPhone.includes("@")? "email": "phone"}=${emailPhone}`)
+            setRequestUrl(`${config.backendUrl}${config.backendApiPath}/org/get-user?${email.includes("@")? "email": "phone"}=${email}`)
          }
          else {
             nameBind.setdisabled(false)
             userIdBind.setdisabled(false);
          }
-    },[emailPhone])
+    },[email])
 
     const loadMembers = () => {
         const page = 1;
@@ -91,7 +90,7 @@ const NewMember = (props) => {
         }
 
         const handleMembersFetch = (statusCode, responseBody) => {
-            if(statusCode == 200) {
+            if(statusCode === 200) {
                 // todo: handle reponse body
                 if(responseBody.count > 0) {
                     DynamicTableRef.current.updateTableData(responseBody.result)
@@ -124,7 +123,7 @@ const NewMember = (props) => {
 
     const submit = (e) => {
         e.preventDefault();
-        if(name &&  emailPhone && role !== "undefined")  {
+        if(name &&  email && role !== "undefined")  {
             const body = {
                 ...inputValues,
                 organizationId,
@@ -153,11 +152,16 @@ const NewMember = (props) => {
                <form onSubmit={submit.bind(this)}>
                     <div className="form-area">
                         {/* <FormGroup className="stacked" > todo: use for the dynamic field based on user cnfiguration on first time use
-
+                        
                         </FormGroup> */}
+                        <h3>Add new Member</h3>
                         <FormGroup className="stacked">
-                            <label>Email or Phone</label>
-                            <Input {...emailPhoneBind}/>
+                            <label>Email</label>
+                            <Input {...emailBind}/>
+                        </FormGroup>
+                        <FormGroup className="stacked">
+                            <label>Phone</label>
+                            <Input {...phoneBind}/>
                         </FormGroup>
                         <FormGroup className="stacked">
                             <label>User Id</label>
@@ -188,10 +192,11 @@ const NewMember = (props) => {
                         </div>
                     </div>
                 </form>
-                <Button onClick={loadMembers.bind(this)}>Load Members</Button>
+                {/* <Button onClick={loadMembers.bind(this)}>Load Members</Button>
                 <div>
-                    <DynamicTable ref={DynamicTableRef}  ignore={["_id"]}/>
-                </div>
+                    <SimpleTable ref={DynamicTableRef}  ignore={["_id"]}/>
+                    
+                </div> */}
         </WorkSpaceContainer>
     )
 
