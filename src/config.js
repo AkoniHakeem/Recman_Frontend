@@ -4,7 +4,7 @@ const environments = {
         backendApiPath: "/api/v1"
     },
     "production": {
-        backendUrl: "https://recman-dlwjq.ondigitalocean.app",
+        backendUrl: "https://port-3001-my-first-container-akozymayor288218.preview.codeanywhere.com",
         backendApiPath: "/api/v1"
     }
 }
